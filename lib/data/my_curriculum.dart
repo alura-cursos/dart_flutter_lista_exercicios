@@ -5,6 +5,7 @@ import '../models/project.dart';
 Curriculum myCurriculum = Curriculum(
   name: "Risoflora Mangle",
   imagePath: "assets/foto.jpg",
+  email: "ris.mangle@gmail.com",
   listEducation: myEducationExperience,
   listProfessional: myProfessionalExperience,
   listProjects: myProjects,
