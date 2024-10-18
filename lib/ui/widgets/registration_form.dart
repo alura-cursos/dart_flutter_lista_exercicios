@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../models/event_registration.dart';
+import '../../services/event_registration_service.dart';
 
 class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({super.key});
+  final EventRegistrationService eventRegistrationService;
+  const RegistrationForm({super.key, required this.eventRegistrationService});
 
   @override
   State<RegistrationForm> createState() => _RegistrationFormState();
@@ -12,6 +14,10 @@ class RegistrationForm extends StatefulWidget {
 class _RegistrationFormState extends State<RegistrationForm> {
   TicketType selectedTicketType = TicketType.regular;
   DietaryPreference selectedDietaryPreference = DietaryPreference.noPreference;
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +69,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             // Campo de nome
             TextFormField(
+              controller: _nameController,
               decoration: const InputDecoration(labelText: 'Nome Completo'),
             ),
 
@@ -70,6 +77,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
             // Campo de email
             TextFormField(
+              controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
 
@@ -77,6 +85,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
             // Campo de telefone
             TextFormField(
+              controller: _phoneController,
               decoration:
                   const InputDecoration(labelText: 'Número de Telefone'),
             ),
@@ -145,7 +154,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             // Botão de continuar (sem comportamento)
             ElevatedButton(
               onPressed: () {
-                // Sem comportamento, só mudança visual
+                onRegisterButtonClicked();
               },
               style: ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(
@@ -164,5 +173,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
         ),
       ),
     );
+  }
+
+  onRegisterButtonClicked() {
+    String fullName = _nameController.text;
+    String email = _emailController.text;
+    String phoneNumber = _phoneController.text;
+
+    EventRegistration newEventRegistration = EventRegistration(
+      fullName: fullName,
+      email: email,
+      ticketType: selectedTicketType,
+      phoneNumber: phoneNumber,
+      dietaryPreference: selectedDietaryPreference,
+    );
+
+    widget.eventRegistrationService.addEventRegistration(newEventRegistration);
+
+    Navigator.pop(context);
   }
 }
